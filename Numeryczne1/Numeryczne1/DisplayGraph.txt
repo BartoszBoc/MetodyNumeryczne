@@ -1,0 +1,13 @@
+set title "Derivative Error"
+set logscale xy
+set grid
+set terminal png
+set xlabel "h"  # X - h
+set ylabel "Error"  # Y - Error
+set output 'error.png'
+
+plot "FileTable" using 5:1 with linespoints title "Double, A", \
+     "FileTable" using 5:2 with linespoints title "Double, B", \
+     "FileTable" using 5:3 with linespoints title "Float, A", \
+     "FileTable" using 5:4 with linespoints title "Float, B"
+
