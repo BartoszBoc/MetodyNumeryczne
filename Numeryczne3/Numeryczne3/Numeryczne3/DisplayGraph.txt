@@ -1,0 +1,10 @@
+set title "Time Taken"
+set grid
+set terminal png
+set xlabel "Matrix size"
+set ylabel "Time in milliseconds"
+set output 'Wykres.png'
+
+plot "FileTable" using 1:2 with linespoints title "Time Graph"
+
+
