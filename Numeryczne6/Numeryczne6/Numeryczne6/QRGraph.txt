@@ -1,0 +1,13 @@
+set title "Metoda QR"
+set grid
+set logscale y
+set terminal png
+set xlabel "Ilosc iteracji"
+set ylabel "Roznica wartosci wlasnych"
+set output 'QR.png'
+
+plot "QREigenvalues1" using 2:1 with linespoints title "Pierwsza lambda", \
+     "QREigenvalues2" using 2:1 with linespoints title "Druga lambda", \
+     "QREigenvalues3" using 2:1 with linespoints title "Trzecia lambda", \
+     "QREigenvalues4" using 2:1 with linespoints title "Czwarta lambda"
+

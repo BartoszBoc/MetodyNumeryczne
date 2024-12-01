@@ -1,0 +1,9 @@
+set title "Zbieznosc metody potegowej"
+set grid
+set logscale y
+set terminal png
+set xlabel "Ilosc iteracji"
+set ylabel "Roznica"
+set output 'PowerMethod.png'
+
+plot "PowerMethodEigenvalues" using 2:1 with linespoints title "Najwieksza wartosc wlasna"
