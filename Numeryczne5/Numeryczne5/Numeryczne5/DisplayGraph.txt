@@ -1,0 +1,10 @@
+set title "Jacobi and Gauss-Seidel"
+set grid
+set logscale y
+set terminal png
+set xlabel "Amount of iterations"
+set ylabel "Norm difference"
+set output 'Wykres.png'
+
+plot "GSFileTable" using 2:1 with linespoints title "Gauss-Seidel", \
+     "JFileTable" using 2:1 with linespoints title "Jacobi"

@@ -1,0 +1,10 @@
+set title "Jacobi and Gauss-Seidel"
+set grid
+set terminal png
+set xlabel "Amount of iterations"
+set ylabel "Vector Norm"
+set output 'WykresIteracja.png'
+
+plot "GSCompTable" using 2:1 with linespoints title "Gauss-Seidel", \
+     "JCompTable" using 2:1 with linespoints title "Jacobi", \
+     "Result" using 2:1 with linespoints title "Result"
