@@ -1,0 +1,10 @@
+set title "Splajny szescienne"
+set grid
+set terminal png
+set xlabel "x"
+set ylabel "y"
+set output 'CubicSplineGraph.png'
+
+plot "LagrangePunkty - y" using 2:1 with points title "Punkty z siatki", \
+     1/(1 + 10*x**2) title 'y(x)', \
+     "SplineWykres - y" using 2:1 with lines title "Splajny"

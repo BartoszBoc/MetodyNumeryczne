@@ -1,0 +1,11 @@
+set title "Roznica"
+set logscale y
+set grid
+set terminal png
+set xlabel "x"
+set ylabel "Delta"
+set output 'DifferenceGraph.png'
+set format y "1e%T"
+
+plot "Difference - y" using 3:1 with lines title "LagrangeDifference y(x) - Wn(x)", \
+     "Difference - y" using 3:2 with lines title "SplineDifference y(x) - s(x)"

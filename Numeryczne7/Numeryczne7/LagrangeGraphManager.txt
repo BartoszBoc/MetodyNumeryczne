@@ -1,0 +1,10 @@
+set title "Interpolacja Lagrange"
+set grid
+set terminal png
+set xlabel "x"
+set ylabel "y"
+set output 'LagrangeInterpolation.png'
+
+plot "LagrangePunkty - y" using 2:1 with points title "Punkty z siatki", \
+     1/(1 + 10*x**2) title 'y(x)', \
+     "LagrangeWielomian - y" using 2:1 with lines title "Wielomian Langrange"
