@@ -25,8 +25,6 @@ double interpolacjaLagrange(double x, vector<double> x_i, vector<double> y_i, in
 }
 
 vector<vector<double>> szesciennySpline(vector<double> x_i, vector<double> y_i, int n) {
-    vector<double> a(n - 1), b(n - 1), c(n - 1), d(n - 1);
-
     double h = x_i[1] - x_i[0];
 
     vector<double> righthandside(n, 0.0);
@@ -46,20 +44,14 @@ vector<vector<double>> szesciennySpline(vector<double> x_i, vector<double> y_i, 
         xi_i[i] = (righthandside[i] - subdiagonals[i] * xi_i[i + 1]) / diagonal[i];
     }
 
-    for (int i = 0; i < n - 1; i++) {
-        a[i] = (xi_i[i + 1] - xi_i[i]) / (6 * h);
-        b[i] = xi_i[i] / 2.0;
-        c[i] = (y_i[i + 1] - y_i[i]) / h - h * (2 * xi_i[i] + xi_i[i + 1]) / 6;
-        d[i] = y_i[i];
-    }
-
     vector<vector<double>> abcd(4, vector<double>(n - 1));
     for (int i = 0; i < n - 1; i++) {
-        abcd[0][i] = a[i];
-        abcd[1][i] = b[i];
-        abcd[2][i] = c[i];
-        abcd[3][i] = d[i];
+        abcd[0][i] = (xi_i[i + 1] - xi_i[i]) / (6 * h);
+        abcd[1][i] = xi_i[i] / 2.0;
+        abcd[2][i] = (y_i[i + 1] - y_i[i]) / h - h * (2 * xi_i[i] + xi_i[i + 1]) / 6;
+        abcd[3][i] = y_i[i];
     }
+
     return abcd;
 }
 
