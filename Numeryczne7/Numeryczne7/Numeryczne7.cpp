@@ -2,11 +2,24 @@
 #include <vector>
 #include <cmath>
 #include <fstream>
+#include <numbers>
 
 using namespace std;
 
 double y(double x) {
     return 1 / (1 + 10 * x * x);
+}
+
+double f(double x) {
+    return (sin(3 * numbers::pi * x)) / (3 * numbers::pi * x);
+}
+
+double g(double x) {
+    return 8 * x * x * x - 3 * x;
+}
+
+double h(double x) {
+    return cbrt(x / 2);
 }
 
 double interpolacjaLagrange(double x, vector<double> x_i, vector<double> y_i, int n) {
@@ -76,7 +89,7 @@ void program(double (*func)(double), string name, int n) {
     }
 
     ofstream PointGraph("LagrangePunkty - " + name);
-    cout << "Lagrange\n\n";
+    cout << "Lagrange - " << name << "\n\n";
     for (double x : x_i) {
         double f = interpolacjaLagrange(x, x_i, y_i, n);
         cout << "f(" << x << ") = " << f << "\n";
@@ -95,6 +108,7 @@ void program(double (*func)(double), string name, int n) {
     }
     LagrangeGraph.close();
 
+    cout << "\n";
     vector<vector<double>> abcd = szesciennySpline(x_i, y_i, n);
 
     vector<double> differenceSpline(2001);
@@ -119,4 +133,7 @@ void program(double (*func)(double), string name, int n) {
 
 int main(){
     program(y, "y", 10);
+    program(f, "f", 20);
+    program(g, "g", 4);
+    program(h, "h", 25);
 }
