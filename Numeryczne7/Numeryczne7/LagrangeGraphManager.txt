@@ -6,5 +6,5 @@ set ylabel "y"
 set output 'LagrangeInterpolation.png'
 
 plot "LagrangePunkty - y" using 2:1 with points title "Punkty z siatki", \
-     1/(1 + 10 * x**2) title 'y(x)', \
-     "LagrangeWielomian - y" using 2:1 with lines title "Wielomian Langrange"
+     1 / (1 + 10 * x**2) lc "red" title 'y(x)', \
+     "LagrangeWielomian - y" using 2:1 with lines lc "blue" title "Wielomian Langrange"
