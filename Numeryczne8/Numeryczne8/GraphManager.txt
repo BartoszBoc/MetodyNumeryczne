@@ -1,0 +1,11 @@
+set title "Aproksymacja"
+set grid
+set terminal png
+set xlabel "x"
+set ylabel "y"
+set output 'ApproximationGraph.png'
+set yrange [-1.5:2.5]
+
+plot "points" using 2:1 with points title "Punkty z siatki", \
+     "precise" using 2:1 with lines lc "blue" title "F(x)", \
+     "approx" using 2:1 with lines lc "red" title "Aproksymacja"

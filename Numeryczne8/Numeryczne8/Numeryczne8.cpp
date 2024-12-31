@@ -1,7 +1,9 @@
 #include <iostream>
+#include <fstream>
 #include <cmath>
 #include <vector>
 #include <numbers>
+#include <random>
 #include "eigen-3.4.0/eigen-3.4.0/Eigen/Dense"
 
 #define M 6
@@ -35,7 +37,12 @@ double exercisefunction(double x, VectorXd acoefficient) {
     return result;
 }
 
-double normaldistribution(double y, double sigma) { return (1.0 / sqrt(2.0 * numbers::pi * sigma * sigma)) * exp(-(y * y) / (2.0 * sigma * sigma)); }
+double normalDistribution(double sigma) { 
+    random_device randomdevice;
+    mt19937 generator(randomdevice());
+    normal_distribution<> normaldistribution(0.0, sigma);
+    return normaldistribution(generator);
+}
 
 void vectorWriteout(VectorXd v) {
     cout << "(";
@@ -44,6 +51,17 @@ void vectorWriteout(VectorXd v) {
         if (i < v.size() - 1) cout << ", ";
         else cout << ")\n";
     }
+}
+
+void drawFunction(string filename, VectorXd coefficients) {
+    ofstream funct(filename);
+
+    for (double j = -1.0; j <= 1.0; j += 0.001) {
+        double result = exercisefunction(j, coefficients);
+        funct << scientific << result << " " << j << "\n";
+    }
+
+    funct.close();
 }
 
 void program(int n, VectorXd acoefficient, double sigma) {
@@ -58,7 +76,7 @@ void program(int n, VectorXd acoefficient, double sigma) {
     for (int i = 0; i < n; i++) {
         xset(i) = -1.0 + (2.0 * i) / (n - 1);
         yset(i) = exercisefunction(xset(i), acoefficient);
-        yset(i) += normaldistribution(yset(i), sigma);
+        yset(i) += normalDistribution(sigma);
     }
 
     MatrixXd Amatrix(n, M);
@@ -75,10 +93,17 @@ void program(int n, VectorXd acoefficient, double sigma) {
     vectorWriteout(acoefficient);
     cout << "\nCoefficients reached: \n";
     vectorWriteout(pcoefficient);
+
+    drawFunction("precise", acoefficient);
+    drawFunction("approx", pcoefficient);
+
+    ofstream pointPlotter("points");
+    for (int i = 0; i < n; i++) pointPlotter << scientific << yset[i] << " " << xset[i] << "\n";
+    pointPlotter.close();
 }
 
 int main(){
     VectorXd acoefficient(M); 
     acoefficient << -0.05, 1.5, 3.0, -2.0, 1.0, -5.0;
-    program(15, acoefficient, 0.5);
+    program(400, acoefficient, 3.0);
 }
