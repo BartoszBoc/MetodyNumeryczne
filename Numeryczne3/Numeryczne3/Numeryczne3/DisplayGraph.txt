@@ -5,6 +5,6 @@ set xlabel "Matrix size"
 set ylabel "Time in milliseconds"
 set output 'Wykres.png'
 
-plot "FileTable" using 1:2 with linespoints title "Time Graph"
+plot "FileTable" using 1:2 with lines title "Time Graph"
 
 

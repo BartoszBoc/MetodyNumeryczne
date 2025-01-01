@@ -3,6 +3,8 @@
 #include <chrono>
 #include <fstream>
 
+#define SIZE 300
+
 using namespace std;
 
 struct FourDiagonalMatrix {			// Oznaczenia L i U pomocne dla macierzy LU która zostanie zwrócona przez funkcje LUDecomposition
@@ -29,9 +31,9 @@ FourDiagonalMatrix LUDecomposition(FourDiagonalMatrix Matrix, int size) {
 		
 		LU.L_lowdiag[i - 1] = Matrix.L_lowdiag[i - 1] / LU.U_diag[i - 1];	// Obliczenie diagonali pod g³ówn¹ diagonal¹ dla macierzy L (g³ówna diagonala bêdzie zawieraæ tylko 1-ki)
 
-		LU.U_diag[i] = Matrix.U_diag[i] - LU.L_lowdiag[i - 1] * LU.U_highdiag[i - 1];	// Obliczanie g³ównej przek¹tnej w macierzy U
+		LU.U_diag[i] -= LU.L_lowdiag[i - 1] * LU.U_highdiag[i - 1];	// Obliczanie g³ównej przek¹tnej w macierzy U
 
-		if (i < (size - 1)) LU.U_highdiag[i] = Matrix.U_highdiag[i] - LU.L_lowdiag[i - 1] * LU.U_higherdiag[i - 1];	// Obliczanie przek¹tnej nad g³ówn¹ w macierzy U (a¿ do jej koñca)
+		if (i < (size - 1)) LU.U_highdiag[i] -= LU.L_lowdiag[i - 1] * Matrix.U_higherdiag[i - 1];	// Obliczanie przek¹tnej nad g³ówn¹ w macierzy U (a¿ do jej koñca)
 
 		if (i < (size - 2)) LU.U_higherdiag[i] = Matrix.U_higherdiag[i]; // Obliczanie przek¹tnej nad przek¹tn¹ nad g³ówn¹ w macierzy U
 	}
@@ -56,15 +58,15 @@ vector<double> Backward_Substitution(FourDiagonalMatrix LU, vector<double> z) {
 	vector<double> y(vectorsize);
 	y[vectorsize - 1] = z[vectorsize - 1] / LU.U_diag[vectorsize - 1];		// Analogicznie, lecz od koñca (backward_substitution)
 
-	for (int i = vectorsize - 2; i >= 0; --i) y[i] = (z[i] - LU.U_highdiag[i] * y[i + 1] - ((i < vectorsize - 2) ? (LU.U_higherdiag[i]) : 0)) / LU.U_diag[i];
+	for (int i = vectorsize - 2; i >= 0; i--) y[i] = (z[i] - LU.U_highdiag[i] * y[i + 1] - ((i < vectorsize - 2) ? (LU.U_higherdiag[i]) * y[i + 2] : 0)) / LU.U_diag[i];
 
 	return y;
 }
 
 double determinant(FourDiagonalMatrix LU) {
 	double determinant = 1.0;
-	for (double Un : LU.U_diag) determinant *= Un;	// Wyznacznik macierzy A jest równy wyznacznikom macierzy L i U (det(L) = 1, wiêc tylko wyznacznikowi macierzy U)
-	return determinant;								// Wyznacznik macierzy U jest równy iloczynowi diagonali
+	for (double U : LU.U_diag) determinant *= U;	// Wyznacznik macierzy A jest równy wyznacznikom macierzy L i U (det(L) = 1, wiêc tylko wyznacznikowi macierzy U)
+	return determinant;								// Wyznacznik macierzy U jest równy iloczynowi elementów na diagonali
 }	
 
 void program(int size, bool shouldPrint) {
@@ -109,7 +111,7 @@ void program(int size, bool shouldPrint) {
 
 int main()
 {
-	program(300, true);
+	program(SIZE, true);
 
 	int i = 100;
 	vector<pair<int, double>> time;
@@ -130,8 +132,10 @@ int main()
 	}
 
 	ofstream FileMaker("FileTable");
-
 	for (auto value : time) {
 		FileMaker << value.first << " " << value.second << "\n";
 	}
+	FileMaker.close();
+
+	system("gnuplot DisplayGraph.txt");
 }
